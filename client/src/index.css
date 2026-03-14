@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white font-sans antialiased;
+    background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight text-white;
+  }
+}
+
+@layer components {
+  .btn-clay {
+    @apply px-8 py-3 rounded-clay bg-primary text-white font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06),
+      inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-clay-secondary {
+    @apply px-8 py-3 rounded-clay bg-secondary text-white font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06),
+      inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl;
+  }
+
+  .textured-section {
+    @apply relative overflow-hidden;
+    background-image: var(
+      --bg-texture,
+      url("https://www.transparenttextures.com/patterns/wood-pattern.png")
+    );
+  }
+}
