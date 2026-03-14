@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
+const JWT_SECRET = process.env["JWT_SECRET"] || "supersecretkey";
 
 export interface AuthRequest extends Request {
   adminId?: string;
@@ -15,10 +15,11 @@ export const authenticateAdmin = (
   res: Response,
   next: NextFunction,
 ) => {
-  const token = req.cookies.adminToken;
+  const token = req.cookies["adminToken"];
 
   if (!token) {
-    return res.status(401).json({ message: "Authentication required" });
+    res.status(401).json({ message: "Authentication required" });
+    return;
   }
 
   try {
@@ -26,6 +27,7 @@ export const authenticateAdmin = (
     req.adminId = decoded.adminId;
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Invalid or expired token" });
+    res.status(401).json({ message: "Invalid or expired token" });
+    return;
   }
 };

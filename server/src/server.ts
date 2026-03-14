@@ -51,6 +51,6 @@ mongoose
     });
   });
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.send("Festibikutsi API is running");
 });

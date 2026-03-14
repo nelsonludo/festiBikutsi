@@ -9,7 +9,7 @@ import type { AuthRequest } from "../middleware/auth.middleware.js";
 dotenv.config();
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
+const JWT_SECRET = process.env["JWT_SECRET"] || "supersecretkey";
 
 // Admin Login
 router.post("/login", async (req, res) => {
@@ -32,21 +32,22 @@ router.post("/login", async (req, res) => {
 
     res.cookie("adminToken", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env["NODE_ENV"] === "production",
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
 
-    res.json({ message: "Logged in successfully", email: admin.email });
+    return res.json({ message: "Logged in successfully", email: admin.email });
   } catch (error) {
     res.status(500).json({ message: "Login error", error });
+    return;
   }
 });
 
 // Admin Logout
-router.post("/logout", (req, res) => {
+router.post("/logout", (_req, res) => {
   res.clearCookie("adminToken");
-  res.json({ message: "Logged out successfully" });
+  return res.json({ message: "Logged out successfully" });
 });
 
 // Get current admin
@@ -56,9 +57,10 @@ router.get("/me", authenticateAdmin, async (req: AuthRequest, res) => {
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }
-    res.json(admin);
+    return res.json(admin);
   } catch (error) {
     res.status(500).json({ message: "Error fetching admin profile", error });
+    return;
   }
 });
 

@@ -21,16 +21,17 @@ const router = Router();
 router.use(authenticateAdmin);
 
 // Settings Management
-router.get("/settings", async (req, res) => {
+router.get("/settings", async (_req, res) => {
   try {
     let settings = await Settings.findOne();
     if (!settings) {
       settings = new Settings({});
       await settings.save();
     }
-    res.json(settings);
+    return res.json(settings);
   } catch (error) {
     res.status(500).json({ message: "Error fetching settings", error });
+    return;
   }
 });
 
@@ -44,7 +45,7 @@ router.patch("/settings", async (req, res) => {
       settings.festivalDate = validatedData.festivalDate;
     }
     await settings.save();
-    res.json(settings);
+    return res.json(settings);
   } catch (err: any) {
     const error = err;
     if (error.name === "ZodError") {
@@ -53,28 +54,31 @@ router.patch("/settings", async (req, res) => {
         .json({ message: "Validation error", errors: error.errors });
     }
     res.status(500).json({ message: "Error updating settings", error });
+    return;
   }
 });
 
 // Artist Management
-router.get("/artists", async (req, res) => {
+router.get("/artists", async (_req, res) => {
   try {
     const artists = await Performer.find().sort({ registrationDate: -1 });
-    res.json(artists);
+    return res.json(artists);
   } catch (err: any) {
     const error = err;
     res.status(500).json({ message: "Error fetching artists", error });
+    return;
   }
 });
 
-router.get("/artists/stats", async (req, res) => {
+router.get("/artists/stats", async (_req, res) => {
   try {
     const total = await Performer.countDocuments();
     const approved = await Performer.countDocuments({ isApproved: true });
-    res.json({ total, approved });
+    return res.json({ total, approved });
   } catch (err: any) {
     const error = err;
     res.status(500).json({ message: "Error fetching artist stats", error });
+    return;
   }
 });
 
@@ -95,7 +99,7 @@ router.post("/artists", upload.single("image"), async (req, res) => {
 
     const artist = new Performer(validatedData);
     await artist.save();
-    res.status(201).json(artist);
+    return res.status(201).json(artist);
   } catch (err: any) {
     const error = err;
     console.error("Artist Creation Error:", error);
@@ -105,6 +109,7 @@ router.post("/artists", upload.single("image"), async (req, res) => {
         .json({ message: "Validation error", errors: error.errors });
     }
     res.status(500).json({ message: "Error creating artist", error });
+    return;
   }
 });
 
@@ -119,7 +124,7 @@ router.patch("/artists/:id", async (req, res) => {
       },
     );
     if (!artist) return res.status(404).json({ message: "Artist not found" });
-    res.json(artist);
+    return res.json(artist);
   } catch (err: any) {
     const error = err;
     if (error.name === "ZodError") {
@@ -128,6 +133,7 @@ router.patch("/artists/:id", async (req, res) => {
         .json({ message: "Validation error", errors: error.errors });
     }
     res.status(500).json({ message: "Error updating artist", error });
+    return;
   }
 });
 
@@ -135,23 +141,25 @@ router.delete("/artists/:id", async (req, res) => {
   try {
     const artist = await Performer.findByIdAndDelete(req.params.id);
     if (!artist) return res.status(404).json({ message: "Artist not found" });
-    res.json({ message: "Artist deleted successfully" });
+    return res.json({ message: "Artist deleted successfully" });
   } catch (err: any) {
     const error = err;
     res.status(500).json({ message: "Error deleting artist", error });
+    return;
   }
 });
 
 // Schedule Management
-router.get("/schedule", async (req, res) => {
+router.get("/schedule", async (_req, res) => {
   try {
     const schedule = await Schedule.find()
       .populate("artist")
       .sort({ day: 1, time: 1 });
-    res.json(schedule);
+    return res.json(schedule);
   } catch (err: any) {
     const error = err;
     res.status(500).json({ message: "Error fetching schedule", error });
+    return;
   }
 });
 
@@ -185,7 +193,7 @@ router.post("/schedule", async (req, res) => {
 
     const item = new Schedule(validatedData);
     await item.save();
-    res.status(201).json(item);
+    return res.status(201).json(item);
   } catch (err: any) {
     const error = err;
     if (error.name === "ZodError") {
@@ -194,6 +202,7 @@ router.post("/schedule", async (req, res) => {
         .json({ message: "Validation error", errors: error.errors });
     }
     res.status(500).json({ message: "Error creating schedule item", error });
+    return;
   }
 });
 
@@ -209,7 +218,7 @@ router.patch("/schedule/:id", async (req, res) => {
     );
     if (!item)
       return res.status(404).json({ message: "Schedule item not found" });
-    res.json(item);
+    return res.json(item);
   } catch (err: any) {
     const error = err;
     if (error.name === "ZodError") {
@@ -218,6 +227,7 @@ router.patch("/schedule/:id", async (req, res) => {
         .json({ message: "Validation error", errors: error.errors });
     }
     res.status(500).json({ message: "Error updating schedule item", error });
+    return;
   }
 });
 
@@ -226,21 +236,23 @@ router.delete("/schedule/:id", async (req, res) => {
     const item = await Schedule.findByIdAndDelete(req.params.id);
     if (!item)
       return res.status(404).json({ message: "Schedule item not found" });
-    res.json({ message: "Schedule item deleted successfully" });
+    return res.json({ message: "Schedule item deleted successfully" });
   } catch (err: any) {
     const error = err;
     res.status(500).json({ message: "Error deleting schedule item", error });
+    return;
   }
 });
 
 // Gallery Management
-router.get("/gallery", async (req, res) => {
+router.get("/gallery", async (_req, res) => {
   try {
     const images = await Gallery.find().sort({ createdAt: -1 });
-    res.json(images);
+    return res.json(images);
   } catch (err: any) {
     const error = err;
     res.status(500).json({ message: "Error fetching gallery", error });
+    return;
   }
 });
 
@@ -261,10 +273,11 @@ router.post("/gallery/upload", upload.single("file"), async (req, res) => {
 
     const galleryItem = new Gallery(validatedData);
     await galleryItem.save();
-    res.status(201).json(galleryItem);
+    return res.status(201).json(galleryItem);
   } catch (err: any) {
     const error = err;
     res.status(500).json({ message: "Error uploading gallery item", error });
+    return;
   }
 });
 
@@ -279,7 +292,7 @@ router.patch("/gallery/:id", async (req, res) => {
       },
     );
     if (!image) return res.status(404).json({ message: "Image not found" });
-    res.json(image);
+    return res.json(image);
   } catch (err: any) {
     const error = err;
     if (error.name === "ZodError") {
@@ -288,6 +301,7 @@ router.patch("/gallery/:id", async (req, res) => {
         .json({ message: "Validation error", errors: error.errors });
     }
     res.status(500).json({ message: "Error updating gallery image", error });
+    return;
   }
 });
 
@@ -296,19 +310,21 @@ router.delete("/gallery/:id", async (req, res) => {
     const image = await Gallery.findByIdAndDelete(req.params.id);
     if (!image) return res.status(404).json({ message: "Image not found" });
     // Note: We could also delete the physical file here
-    res.json({ message: "Image deleted successfully" });
+    return res.json({ message: "Image deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting gallery image", error });
+    return;
   }
 });
 
 // History Management
-router.get("/history", async (req, res) => {
+router.get("/history", async (_req, res) => {
   try {
     const historyItems = await History.find().sort({ order: 1, year: 1 });
-    res.json(historyItems);
+    return res.json(historyItems);
   } catch (error) {
     res.status(500).json({ message: "Error fetching history items", error });
+    return;
   }
 });
 
@@ -317,9 +333,10 @@ router.post("/history", async (req, res) => {
     const validatedData = historySchema.parse(req.body);
     const historyItem = new History(validatedData);
     await historyItem.save();
-    res.status(201).json(historyItem);
+    return res.status(201).json(historyItem);
   } catch (error) {
     res.status(500).json({ message: "Error creating history item", error });
+    return;
   }
 });
 
@@ -330,18 +347,20 @@ router.patch("/history/:id", async (req, res) => {
       req.body,
       { new: true },
     );
-    res.json(historyItem);
+    return res.json(historyItem);
   } catch (error) {
     res.status(500).json({ message: "Error updating history item", error });
+    return;
   }
 });
 
 router.delete("/history/:id", async (req, res) => {
   try {
     await History.findByIdAndDelete(req.params.id);
-    res.json({ message: "History item deleted" });
+    return res.json({ message: "History item deleted" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting history item", error });
+    return;
   }
 });
 

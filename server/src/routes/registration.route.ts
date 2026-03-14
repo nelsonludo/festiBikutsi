@@ -35,29 +35,31 @@ router.post("/artists", upload.single("image"), async (req, res) => {
     });
 
     await newPerformer.save();
-    res.status(201).json({
+    return res.status(201).json({
       message: "Performer registered successfully",
       data: newPerformer,
     });
   } catch (error) {
     console.error("Registration Error:", error);
     res.status(500).json({ message: "Error registering performer", error });
+    return;
   }
 });
 
-router.get("/artists", async (req, res) => {
+router.get("/artists", async (_req, res) => {
   try {
     const performers = await Performer.find({
       isApproved: true,
       isPublished: true,
     }).sort({ registrationDate: -1 });
-    res.json(performers);
+    return res.json(performers);
   } catch (error) {
     res.status(500).json({ message: "Error fetching performers", error });
+    return;
   }
 });
 
-router.get("/schedule", async (req, res) => {
+router.get("/schedule", async (_req, res) => {
   try {
     const items = await Schedule.find({ isPublished: true }).sort({
       day: 1,
@@ -76,38 +78,44 @@ router.get("/schedule", async (req, res) => {
       };
     });
 
-    res.json(enrichedItems);
+    return res.json(enrichedItems);
   } catch (error) {
     res.status(500).json({ message: "Error fetching schedule", error });
+    return;
   }
 });
 
-router.get("/gallery", async (req, res) => {
+router.get("/gallery", async (_req, res) => {
   try {
     const images = await Gallery.find({ isPublished: true }).sort({
       createdAt: -1,
     });
-    res.json(images);
+    return res.json(images);
   } catch (error) {
     res.status(500).json({ message: "Error fetching gallery", error });
+    return;
   }
 });
 
-router.get("/history", async (req, res) => {
+router.get("/history", async (_req, res) => {
   try {
     const historyItems = await History.find().sort({ order: 1, year: 1 });
-    res.json(historyItems);
+    return res.json(historyItems);
   } catch (error) {
     res.status(500).json({ message: "Error fetching history", error });
+    return;
   }
 });
 
-router.get("/settings", async (req, res) => {
+router.get("/settings", async (_req, res) => {
   try {
     const settings = await mongoose.model("Settings").findOne();
-    res.json(settings || { festivalDate: new Date("2026-11-25T00:00:00") });
+    return res.json(
+      settings || { festivalDate: new Date("2026-11-25T00:00:00") },
+    );
   } catch (error) {
     res.status(500).json({ message: "Error fetching settings", error });
+    return;
   }
 });
 

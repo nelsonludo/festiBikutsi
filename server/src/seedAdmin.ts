@@ -7,9 +7,9 @@ dotenv.config();
 
 const seedAdmin = async () => {
   const MONGODB_URI =
-    process.env.MONGODB_URI || "mongodb://localhost:27017/festibikutsi";
-  const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+    process.env["MONGODB_URI"] || "mongodb://localhost:27017/festibikutsi";
+  const ADMIN_EMAIL = process.env["ADMIN_EMAIL"];
+  const ADMIN_PASSWORD = process.env["ADMIN_PASSWORD"];
 
   if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
     console.error("❌ ADMIN_EMAIL and ADMIN_PASSWORD must be set in .env");
