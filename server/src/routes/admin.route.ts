@@ -94,7 +94,7 @@ router.post("/artists", upload.single("image"), async (req, res) => {
     const validatedData = artistCreateSchema.parse(data);
 
     if (req.file) {
-      validatedData.imageUrl = `/uploads/${req.file.filename}`;
+      validatedData.imageUrl = req.file.path;
     }
 
     const artist = new Performer(validatedData);
@@ -265,7 +265,7 @@ router.post("/gallery/upload", upload.single("file"), async (req, res) => {
     // Use schema for validation and defaults (isPublished defaults to true)
     const validatedData = gallerySchema.parse({
       ...req.body,
-      url: req.file.filename, // Store only the filename
+      url: req.file.path, // Store the Cloudinary secure URL
       type:
         req.body.type ||
         (req.file.mimetype.startsWith("video") ? "video" : "image"),

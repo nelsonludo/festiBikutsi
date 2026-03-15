@@ -20,7 +20,7 @@ router.post("/artists", upload.single("image"), async (req, res) => {
     }
 
     const { name, stageName, genre, email, bio, epkLink } = req.body;
-    const imageUrl = req.file ? req.file.filename : undefined;
+    const imageUrl = req.file ? req.file.path : undefined;
 
     const newPerformer = new Performer({
       name,
