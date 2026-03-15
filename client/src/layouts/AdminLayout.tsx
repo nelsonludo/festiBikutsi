@@ -89,7 +89,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               className="flex items-center gap-2 group"
             >
               <LogoContainer />
-              <span className="font-black text-base tracking-tight text-primary transition-colors group-hover:text-primary/80 leading-tight">
+              <span className="font-black text-base tracking-tight text-secondary transition-colors group-hover:text-primary/80 leading-tight">
                 FESTI
                 <span className="block text-slate-400 uppercase text-xs font-bold">
                   {t("admin.common.dashboard")}
@@ -126,7 +126,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               to={item.path}
               className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
                 location.pathname === item.path
-                  ? "bg-primary/10 text-primary font-bold shadow-sm"
+                  ? "bg-primary/10 text-secondary font-bold shadow-sm"
                   : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
@@ -157,7 +157,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           {/* Logout */}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 p-3 w-full rounded-xl text-red-500 hover:bg-red-50 transition-all"
+            className="flex items-center gap-3 p-3 w-full rounded-xl text-secondary hover:bg-secondary/10 transition-all"
           >
             <LogOut size={22} className="flex-shrink-0" />
             <span className={`${!isSidebarOpen && "hidden"} font-bold`}>
