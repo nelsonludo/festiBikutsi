@@ -110,12 +110,12 @@ const ScheduleManager: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex bg-slate-100 p-1.5 rounded-2xl w-fit">
+      <div className="flex bg-slate-100 p-1.5 rounded-2xl w-full sm:w-fit overflow-x-auto no-scrollbar">
         {[1, 2, 3].map((day) => (
           <button
             key={day}
             onClick={() => setActiveDay(day)}
-            className={`px-8 py-3 rounded-xl font-black transition-all ${
+            className={`flex-1 sm:flex-none px-6 sm:px-8 py-3 rounded-xl font-black transition-all whitespace-nowrap ${
               activeDay === day
                 ? "bg-white text-primary shadow-sm"
                 : "text-slate-400 hover:text-slate-600"
@@ -249,18 +249,18 @@ const ScheduleManager: React.FC = () => {
                   .map((item) => (
                     <div
                       key={item._id}
-                      className="p-6 flex items-center justify-between hover:bg-slate-50/50 transition-colors group"
+                      className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between hover:bg-slate-50/50 transition-colors group gap-4 md:gap-0"
                     >
                       <div className="flex items-center gap-6">
-                        <div className="w-16 text-center">
-                          <div className="text-primary font-black text-lg">
+                        <div className="w-16 text-center md:text-left">
+                          <div className="text-primary font-black text-xl">
                             {item.time}
                           </div>
                           <div className="text-[10px] font-black text-slate-300 uppercase tracking-tighter">
                             UTC+1
                           </div>
                         </div>
-                        <div className="w-px h-8 bg-slate-100" />
+                        <div className="hidden md:block w-px h-8 bg-slate-100" />
                         <div>
                           <div className="flex items-center gap-2 mb-0.5">
                             <div className="font-black text-slate-900 text-lg group-hover:text-primary transition-colors">
@@ -282,7 +282,7 @@ const ScheduleManager: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center gap-2 md:opacity-0 group-hover:opacity-100 transition-opacity w-full md:w-auto justify-end border-t md:border-t-0 pt-4 md:pt-0 border-slate-50">
                         <button
                           onClick={() =>
                             updateStatus.mutate({

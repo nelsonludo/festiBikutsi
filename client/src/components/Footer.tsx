@@ -8,6 +8,8 @@ import {
   MapPin,
   Phone,
   X,
+  Music,
+  Hash as Threads,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,13 +32,43 @@ const Footer: React.FC = () => {
                 {t("footer.quote")}
               </p>
               <div className="flex gap-4">
-                {[Facebook, Instagram, Twitter, Youtube].map((Icon, i) => (
+                {[
+                  {
+                    socialMediaName: Facebook,
+                    socialMediaLink: "https://web.facebook.com/festibikutsicam",
+                  },
+                  {
+                    socialMediaName: Instagram,
+                    socialMediaLink:
+                      "https://www.instagram.com/festibikutsicameroun/",
+                  },
+                  {
+                    socialMediaName: Twitter,
+                    socialMediaLink: "https://x.com/festi_Bikutsi",
+                  },
+                  {
+                    socialMediaName: Youtube,
+                    socialMediaLink:
+                      "https://www.youtube.com/channel/UCMCra19DbcbcwVR0Q4CKf5Q",
+                  },
+                  {
+                    socialMediaName: Threads,
+                    socialMediaLink:
+                      "https://www.threads.com/@festibikutsicameroun",
+                  },
+                  {
+                    socialMediaName: Music,
+                    socialMediaLink: "https://www.tiktok.com/@festibikutsi",
+                  },
+                ].map((icon, i) => (
                   <a
                     key={i}
-                    href="#"
+                    href={icon.socialMediaLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="p-2 bg-white/5 rounded-full hover:bg-primary transition-colors hover:text-white text-gray-400"
                   >
-                    <Icon size={20} />
+                    <icon.socialMediaName size={20} />
                   </a>
                 ))}
               </div>

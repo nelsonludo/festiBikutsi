@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { motion, AnimatePresence } from "framer-motion";
 import api from "../api.js";
 import { LogoContainer } from "../components/Navbar.js";
 
@@ -72,66 +73,98 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex text-slate-900 font-sans">
+    <div className="min-h-screen bg-[#f8fafc] flex text-slate-900 font-sans relative">
+      {/* Mobile Header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50 px-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <LogoContainer />
+          <span className="font-black text-sm tracking-tight text-secondary leading-tight">
+            FESTI
+            <span className="block text-slate-400 uppercase text-[10px] font-bold">
+              {t("admin.common.dashboard")}
+            </span>
+          </span>
+        </div>
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="p-2 hover:bg-slate-100 rounded-lg text-slate-500"
+        >
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Sidebar Backdrop (Mobile Only) */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsSidebarOpen(false)}
+            className="lg:hidden fixed inset-0 bg-black/50 z-[55] backdrop-blur-sm"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
       <aside
         className={`${
-          isSidebarOpen ? "w-64" : "w-20"
-        } bg-white border-r border-slate-200 transition-all duration-300 flex flex-col fixed inset-y-0 z-50`}
+          isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0 lg:w-20"
+        } bg-white border-r border-slate-200 transition-all duration-300 flex flex-col fixed inset-y-0 z-[60] lg:z-50 shadow-2xl lg:shadow-none`}
       >
         {/* Sidebar Header */}
-        <div className="p-4 flex items-center justify-between border-b border-slate-100">
-          {isSidebarOpen ? (
+        <div className="p-4 flex items-center justify-between border-b border-slate-100 h-16 lg:h-auto">
+          {isSidebarOpen || !isSidebarOpen ? ( // Simplified logic for consistency
             <Link
               to="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 group"
+              className={`flex items-center gap-2 group ${!isSidebarOpen && "lg:mx-auto"}`}
             >
-              <LogoContainer />
-              <span className="font-black text-base tracking-tight text-secondary transition-colors group-hover:text-primary/80 leading-tight">
-                FESTI
-                <span className="block text-slate-400 uppercase text-xs font-bold">
-                  {t("admin.common.dashboard")}
-                </span>
-              </span>
+              {isSidebarOpen ? (
+                <>
+                  <LogoContainer />
+                  <span className="font-black text-base tracking-tight text-secondary transition-colors group-hover:text-primary/80 leading-tight">
+                    FESTI
+                    <span className="block text-slate-400 uppercase text-xs font-bold">
+                      {t("admin.common.dashboard")}
+                    </span>
+                  </span>
+                </>
+              ) : (
+                <img
+                  src="/images/festiBikutsiLogoNoBg-.png"
+                  alt="FestiBikutsi"
+                  className="w-9 h-9 object-contain"
+                />
+              )}
             </Link>
-          ) : (
-            <Link
-              to="/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mx-auto"
-            >
-              <img
-                src="/images/festiBikutsiLogoNoBg-.png"
-                alt="FestiBikutsi"
-                className="w-9 h-9 object-contain"
-              />
-            </Link>
-          )}
+          ) : null}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 flex-shrink-0"
+            className="hidden lg:block p-2 hover:bg-slate-100 rounded-lg text-slate-500 flex-shrink-0"
           >
             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 py-4 space-y-2">
+        <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
           {menuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
+              onClick={() => {
+                if (window.innerWidth < 1024) setIsSidebarOpen(false);
+              }}
               className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
                 location.pathname === item.path
                   ? "bg-primary/10 text-secondary font-bold shadow-sm"
                   : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
-              <item.icon size={22} />
-              <span className={`${!isSidebarOpen && "hidden"}`}>
+              <item.icon size={22} className="flex-shrink-0" />
+              <span className={`${!isSidebarOpen && "lg:hidden"}`}>
                 {item.label}
               </span>
             </Link>
@@ -148,7 +181,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           >
             <Globe size={22} className="flex-shrink-0" />
             <span
-              className={`${!isSidebarOpen && "hidden"} font-bold uppercase text-sm`}
+              className={`${!isSidebarOpen && "lg:hidden"} font-bold uppercase text-sm`}
             >
               {i18n.language === "en" ? "🇫🇷 Français" : "🇬🇧 English"}
             </span>
@@ -160,7 +193,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             className="flex items-center gap-3 p-3 w-full rounded-xl text-secondary hover:bg-secondary/10 transition-all"
           >
             <LogOut size={22} className="flex-shrink-0" />
-            <span className={`${!isSidebarOpen && "hidden"} font-bold`}>
+            <span className={`${!isSidebarOpen && "lg:hidden"} font-bold`}>
               {t("admin.common.logout")}
             </span>
           </button>
@@ -169,7 +202,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
       {/* Main Content */}
       <main
-        className={`flex-1 transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-20"} p-8`}
+        className={`flex-1 transition-all duration-300 ${
+          isSidebarOpen ? "lg:ml-64" : "lg:ml-20"
+        } pt-24 lg:pt-8 px-4 lg:px-8 pb-12`}
       >
         <div className="max-w-6xl mx-auto">{children}</div>
       </main>

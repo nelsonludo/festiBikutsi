@@ -26,7 +26,7 @@ export default {
         "texture-organic":
           "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://www.transparenttextures.com/patterns/wood-pattern.png')",
         "texture-clay":
-          "url('https://www.transparenttextures.com/patterns/clay.png')",
+          "url('https://www.transparenttextures.com/patterns/xv.png')",
       },
       borderRadius: {
         clay: "1.5rem",
