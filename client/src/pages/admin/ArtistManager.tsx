@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import api from "../../api.js";
 import type { Artist } from "../../types/index.js";
+import { formatImageUrl } from "../../utils/imageUtils.js";
 
 const ArtistManager: React.FC = () => {
   const { t } = useTranslation();
@@ -155,7 +156,7 @@ const ArtistManager: React.FC = () => {
                       <div className="w-10 h-10 rounded-xl bg-slate-100 overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
                         {artist.imageUrl ? (
                           <img
-                            src={`/uploads/${artist.imageUrl}`}
+                            src={formatImageUrl(artist.imageUrl)}
                             alt={artist.stageName}
                             className="w-full h-full object-cover"
                           />
@@ -305,7 +306,7 @@ const ArtistManager: React.FC = () => {
                 <div className="w-full h-48 bg-slate-100 rounded-[2rem] overflow-hidden border border-slate-200 mb-8 flex items-center justify-center group relative">
                   {selectedArtist.imageUrl ? (
                     <img
-                      src={`/uploads/${selectedArtist.imageUrl}`}
+                      src={formatImageUrl(selectedArtist.imageUrl)}
                       alt={selectedArtist.stageName}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />

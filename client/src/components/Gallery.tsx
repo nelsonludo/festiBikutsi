@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import api from "../api.js";
 import type { GalleryImage } from "../types/index.js";
+import { formatImageUrl } from "../utils/imageUtils.js";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -82,26 +83,14 @@ const Gallery: React.FC = () => {
             >
               {item.type === "video" ? (
                 <video
-                  src={
-                    item.url.startsWith("http")
-                      ? item.url
-                      : item.url.startsWith("/uploads")
-                        ? item.url
-                        : `/uploads/${item.url}`
-                  }
+                  src={formatImageUrl(item.url)}
                   className="w-full h-full object-cover transition-all duration-700 grayscale group-hover:grayscale-0"
                   muted
                   playsInline
                 />
               ) : (
                 <img
-                  src={
-                    item.url.startsWith("http")
-                      ? item.url
-                      : item.url.startsWith("/uploads")
-                        ? item.url
-                        : `/uploads/${item.url}`
-                  }
+                  src={formatImageUrl(item.url)}
                   alt={
                     item.alt ||
                     `${t("gallery.moment")} ${(currentPage - 1) * ITEMS_PER_PAGE + index + 1}`
@@ -184,13 +173,7 @@ const Gallery: React.FC = () => {
             >
               {selectedItem.type === "video" ? (
                 <video
-                  src={
-                    selectedItem.url.startsWith("http")
-                      ? selectedItem.url
-                      : selectedItem.url.startsWith("/uploads")
-                        ? selectedItem.url
-                        : `/uploads/${selectedItem.url}`
-                  }
+                  src={formatImageUrl(selectedItem.url)}
                   className="max-w-full max-h-[90vh]"
                   controls
                   autoPlay
@@ -198,13 +181,7 @@ const Gallery: React.FC = () => {
                 />
               ) : (
                 <img
-                  src={
-                    selectedItem.url.startsWith("http")
-                      ? selectedItem.url
-                      : selectedItem.url.startsWith("/uploads")
-                        ? selectedItem.url
-                        : `/uploads/${selectedItem.url}`
-                  }
+                  src={formatImageUrl(selectedItem.url)}
                   alt={selectedItem.alt || t("gallery.moment")}
                   className="max-w-full max-h-[90vh] object-contain"
                 />

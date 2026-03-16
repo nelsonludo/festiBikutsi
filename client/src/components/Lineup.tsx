@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import api from "../api.js";
 import type { Artist } from "../types/index.js";
+import { formatImageUrl } from "../utils/imageUtils.js";
 
 const Lineup: React.FC = () => {
   const { t } = useTranslation();
@@ -61,7 +62,7 @@ const Lineup: React.FC = () => {
               <div className="aspect-[3/4] overflow-hidden bg-zinc-900 flex items-center justify-center relative border-b border-white/5">
                 {artist.imageUrl ? (
                   <img
-                    src={`/uploads/${artist.imageUrl}`}
+                    src={formatImageUrl(artist.imageUrl)}
                     alt={artist.stageName}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />

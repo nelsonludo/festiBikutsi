@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import api from "../api.js";
 import type { ScheduleItem } from "../types/index.js";
+import { formatImageUrl } from "../utils/imageUtils.js";
 
 const Schedule: React.FC = () => {
   const { t } = useTranslation();
@@ -129,7 +130,7 @@ const Schedule: React.FC = () => {
                     <div className="w-16 h-16 rounded-2xl overflow-hidden bg-zinc-800 border border-white/5 flex-shrink-0">
                       {event.artistImage ? (
                         <img
-                          src={`/uploads/${event.artistImage}`}
+                          src={formatImageUrl(event.artistImage)}
                           alt={event.artist}
                           className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
                         />

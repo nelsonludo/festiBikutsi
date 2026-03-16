@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import api from "../../api.js";
 import type { GalleryImage } from "../../types/index.js";
 import { useTranslation } from "react-i18next";
+import { formatImageUrl } from "../../utils/imageUtils.js";
 
 const GalleryManager: React.FC = () => {
   const { t } = useTranslation();
@@ -305,21 +306,13 @@ const GalleryManager: React.FC = () => {
                 <div className="w-full h-full flex items-center justify-center bg-slate-800">
                   <Film size={48} className="text-slate-600" />
                   <video
-                    src={
-                      item.url.startsWith("/uploads")
-                        ? item.url
-                        : `/uploads/${item.url}`
-                    }
+                    src={formatImageUrl(item.url)}
                     className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
                   />
                 </div>
               ) : (
                 <img
-                  src={
-                    item.url.startsWith("/uploads")
-                      ? item.url
-                      : `/uploads/${item.url}`
-                  }
+                  src={formatImageUrl(item.url)}
                   alt={item.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
